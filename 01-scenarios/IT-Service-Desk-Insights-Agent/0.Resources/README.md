@@ -3,18 +3,21 @@
 Start with [Capability-matrix.md](Capability-matrix.md) for Path B. It maps each agent-scoped
 skill to its tool, connector/API operation, prerequisites, dependencies, and ON/OFF behavior.
 
-**Included:** documentation and proposed operation contracts. **Not included:** executable
-skill bundles, connector definitions, deployed workflows, tenant credentials, or completed
-evaluation results. Build and approve those deployment artifacts before enabling actions.
+**Included:** documentation, proposed tool contracts, and all 17 instruction-only
+[skill definitions](Skills/README.md), one `SKILL.md` per capability. **Not included:**
+scripts, connector definitions, deployed workflows, tenant credentials, or completed
+evaluation results. Implement/configure and approve the backend components before enabling
+actions; uploading a skill does not create tools or grant permissions.
 
-Keep tenant-specific deployment assets in an approved access-controlled location. The following
-folders describe the expected handoff structure; they are not pre-populated in this repository.
+Keep tenant-specific deployment assets in an approved access-controlled location. Only the
+capability matrix and Skills folder below are populated; the other entries describe the
+expected deployment handoff structure.
 
 | Folder / file | Purpose |
 |---|---|
 | `Capability-matrix.md` | Included capability catalog, dependencies, profiles, limitations, and capability-card fields |
 | `Instructions/` | Versioned Path A or Path B agent instructions |
-| `Skills/` | Implemented skill packages to attach only to this agent; no organization-wide installation |
+| [Skills/](Skills/README.md) | Runtime-focused definitions with matching capability names, tool usage, procedures, and failure behavior; setup/dependencies remain in the matrix |
 | `Profiles/` | Approved capability selections, actual component IDs, and completed capability cards |
 | `Workflows/` | Narrow operation definitions, policy checks, approval contracts, and requester-close workflows |
 | `Connections/` | Non-secret connection references, field mappings, API/query/action IDs, and renewal owners |
@@ -24,6 +27,9 @@ folders describe the expected handoff structure; they are not pre-populated in t
 
 ## Required Deployment Evidence
 
+- Office 365 Users `GetMyProfile` uses each end user's connection, selects minimal fields,
+  and is reused only within that user's conversation; profile errors and language fallback
+  do not trigger impersonation or broaden source access.
 - Approved scope: no ERP, GitHub engineering integration, or agent routing/assignment.
 - Separate permission decisions for creation, descriptive updates, notes, attachments, endpoint
   execution, and requester closure. A create-only profile contains no hidden subsequent writes.
