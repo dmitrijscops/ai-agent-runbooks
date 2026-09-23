@@ -1,6 +1,6 @@
 # Capability Matrix - Investigation and Resolution
 
-This is the deployment contract for **Path B**, one Copilot Studio agent powered by the
+This is the deployment contract for the **GHCP scenario**, one Copilot Studio agent powered by the
 GitHub Copilot harness. Skills are attached only to this agent. No organization-wide skill
 installation, ERP integration, or GitHub engineering integration is required.
 
@@ -13,7 +13,7 @@ operation IDs are identified separately.
 
 ## Shared User-Context Tool
 
-All Path B profiles include the following read-only supporting tool. It is not an
+All deployment profiles include the following read-only supporting tool. It is not an
 eighteenth product-action skill and does not enable any ticket/case mutation.
 
 | Agent-facing tool | Connector | Native action / operation ID | Configuration |
