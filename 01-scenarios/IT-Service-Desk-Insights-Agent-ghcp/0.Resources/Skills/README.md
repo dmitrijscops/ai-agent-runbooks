@@ -1,6 +1,6 @@
 # Agent-Scoped Skill Definitions - GHCP
 
-This folder contains **17 instruction-only skill definitions**, one for each capability
+This folder contains **12 instruction-only skill definitions**, one for each capability
 in the [component matrix](../Capability-matrix.md), listed below in matrix order.
 Each definition is stored as `<capability-name>/SKILL.md`; its YAML `name` matches the
 folder and matrix capability ID exactly.
@@ -27,16 +27,6 @@ only the tools it uses, the information it needs, and how to execute and report 
 | [sn-ticket-attach](sn-ticket-attach/SKILL.md) | Upload approved, sanitized evidence to an existing incident |
 | [sn-ticket-close](sn-ticket-close/SKILL.md) | Close only the user's own eligible incident on request |
 
-## Nexthink
-
-| Skill definition | Purpose |
-|---|---|
-| [nx-device-read](nx-device-read/SKILL.md) | Establish the requester's authorized device and Collector identifier |
-| [nx-diagnostics-read](nx-diagnostics-read/SKILL.md) | Read existing telemetry for a bounded device/time window |
-| [nx-execution-read](nx-execution-read/SKILL.md) | Track the original execution request without resubmitting it |
-| [nx-diagnostics-run](nx-diagnostics-run/SKILL.md) | Run approved collection-only endpoint actions |
-| [nx-remediation-run](nx-remediation-run/SKILL.md) | Run an approved fix and verify actual execution/recovery |
-
 ## Dynamics 365 Customer Service
 
 | Skill definition | Purpose |
@@ -52,7 +42,7 @@ The agent exposes `GetMyProfile` through Office 365 Users **Get my profile (V2)*
 (`MyProfile_V2`). This is a shared read-only tool, not another action skill.
 
 - Load the current user's profile once when details are needed, then reuse it across
-  skills in that conversation. Do not refetch on every skill activation or execution poll.
+  skills in that conversation. Do not refetch on every skill activation or record-status check.
 - Request only `id,displayName,mail,userPrincipalName,preferredLanguage`. Use returned
   details to prefill supported fields and avoid repeating intake questions.
 - Honor explicit language preference first, then message language, using
@@ -64,8 +54,8 @@ The agent exposes `GetMyProfile` through Office 365 Users **Get my profile (V2)*
   them; do not invent identity mappings or search for someone else's profile.
 
 The action runs as the user of its connection, so the runbook binds it to the end user,
-not the maker. The backend still decides record access, requester relationships, and
-device scope; returned profile fields alone do not prove any of those.
+not the maker. The backend still decides record access and requester relationships;
+returned profile fields alone do not prove either.
 
 ## Definition Contents
 
@@ -75,7 +65,7 @@ Each standalone `SKILL.md` includes:
 - Scope and excluded operations.
 - The exact action/read tools used by the procedure and shared `GetMyProfile` tool.
 - Inputs, step-by-step procedure, expected results, and explicit failure behavior.
-- Relevant requester/device authorization, confirmation, and retry boundaries.
+- Relevant requester/record authorization, confirmation, and retry boundaries.
 
 There are no bundled scripts, credentials, connector definitions, or workflow exports.
 The matrix maps tool names to connector/API implementations and required capabilities.
@@ -87,9 +77,9 @@ or invoke native APIs as alternative paths.
 1. Select the approved ON/OFF profile and complete the capability cards from the matrix.
    Provision the required environment, shared user-profile tool, and product connections.
 2. Implement/configure the named tools, fixed schemas, source permissions, and workflow
-   policies. Resolve the actual query/action IDs, field allowlists, requester mappings,
-   and execution budgets in deployment configuration, not in chat.
-3. Prepare required read dependencies before write or execution capabilities. The
+   policies. Resolve the actual operation IDs, field allowlists, requester mappings,
+   and operation budgets in deployment configuration, not in chat.
+3. Prepare required read dependencies before write capabilities. The
    source-incident read dependency of `d365-case-create` is conditional on using a
    ServiceNow reference; case creation does not require ServiceNow write permission.
 4. In the target agent, select **Build > Skills > Add skill > Upload a skill** and upload
@@ -110,10 +100,12 @@ a permission boundary.
 - Backend teams own all routing/assignment. No definition creates a routing capability,
   including as part of case creation.
 - Requester-close skills require an explicit request for the individual's own record and
-  a supported backend transition. General updates can remain OFF. Successful remediation
+  a supported backend transition. General updates can remain OFF. A reported fix
   does not close records, and closure never cascades to a linked record.
-- Nexthink reads, data-collection execution, and remediation remain separate. Accepted
-  work is not completion, and disabling a tool does not cancel an already queued action.
+- No device telemetry or remote diagnostic/remediation tools are included. Use knowledge
+  and authorized record evidence; distinguish user-reported findings from verified facts.
+- Accepted backend work is not completion, and disabling a tool does not cancel an
+  already accepted operation.
 - ERP, GitHub engineering support, record deletion, catalog ordering, unrestricted APIs,
   and attempts to bypass an OFF capability remain outside scope.
 

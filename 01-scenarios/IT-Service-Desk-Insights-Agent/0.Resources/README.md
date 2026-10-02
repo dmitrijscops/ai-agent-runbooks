@@ -19,6 +19,6 @@ mapping, citation checks, and positive/negative permission results with the deli
 handoff. Store tenant-sensitive evidence in an approved access-controlled location,
 not in this public repository. Never commit credentials.
 
-The capability matrix and 17 action-skill definitions belong only to the separate
+The capability matrix and 12 action-skill definitions belong only to the separate
 [GHCP scenario resources](../../IT-Service-Desk-Insights-Agent-ghcp/0.Resources/README.md);
 they are not dependencies of this read-only implementation.
